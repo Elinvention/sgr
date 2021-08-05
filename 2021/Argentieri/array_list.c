@@ -19,8 +19,11 @@ void array_list_add(ArrayList *list, void *element) {
         if (re == NULL)
             return;
         list->data = re;
-        // azzero i nuovi puntatori
-        memset(&list->data[list->allocated], 0, sizeof(void *) * list->allocated);
+        // inizializzo a NULL i nuovi puntatori appena allocati
+        // memset(&list->data[list->allocated], 0, sizeof(void *) * list->allocated);
+        // questa memset da problemi su certe macchine
+        for (void **p = list->data + list->allocated; p < list->data + (list->allocated * 2); p++)
+            *p = NULL;
         list->allocated *= 2;
     }
     list->data[list->length] = element;
